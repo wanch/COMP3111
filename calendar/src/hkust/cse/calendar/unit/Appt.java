@@ -1,12 +1,15 @@
 package hkust.cse.calendar.unit;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.LinkedList;
 
 public class Appt implements Serializable {
 
 	private TimeSpan mTimeSpan;					// Include day, start time and end time of the appointments
 
+	private Timestamp reminderTime;
+	
 	private String mTitle;						// The Title of the appointments
 
 	private String mInfo;						// Store the content of the appointments description
@@ -180,6 +183,9 @@ public class Appt implements Serializable {
 		this.isjoint = isjoint;
 	}
 
-
+	// setter of the reminder
+	public void setReminder(Timestamp r){
+		this.reminderTime = r;
+	}
 
 }

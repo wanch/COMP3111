@@ -2,6 +2,7 @@ package hkust.cse.calendar.gui;
 
 import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
+import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 
 import java.awt.BorderLayout;
@@ -16,6 +17,7 @@ import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,6 +28,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,6 +39,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 
@@ -75,6 +79,13 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private JSplitPane pDes;
 	JPanel detailPanel;
+	
+	private	JComboBox locField;					// ADD
+	private JComboBox freField;					// ADD
+	private JLabel rTimeHL;
+	private JTextField rTimeH;
+	private JLabel rTimeML;
+	private JTextField rTimeM;
 
 //	private JTextField attendField;
 //	private JTextField rejectField;
@@ -120,6 +131,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 		sTimeM = new JTextField(4);
 		psTime.add(sTimeM);
 
+		//JPanel timeAndReq = new JPanel();			// ADD
+		//timeAndReq.setLayout(new BorderLayout());
+		
 		JPanel peTime = new JPanel();
 		Border etimeBorder = new TitledBorder(null, "END TIME");
 		peTime.setBorder(etimeBorder);
@@ -137,19 +151,74 @@ public class AppScheduler extends JDialog implements ActionListener,
 		pTime.add("West", psTime);
 		pTime.add("East", peTime);
 
+		//timeAndReq.add(pTime, BorderLayout.NORTH);
+		
 		JPanel top = new JPanel();
 		top.setLayout(new BorderLayout());
 		top.setBorder(new BevelBorder(BevelBorder.RAISED));
 		top.add(pDate, BorderLayout.NORTH);
 		top.add(pTime, BorderLayout.CENTER);
+		//top.add(timeAndReq, BorderLayout.CENTER);
 
 		contentPane.add("North", top);
 
+		JPanel titleAndFrePanel = new JPanel();
+		titleAndFrePanel.setLayout(new BorderLayout());
+		
+
+		
+		// ADD begin
+		//Enum frequency = {ONE-TIME, daily, weekly, monthly};
+		JPanel frequencyPanel = new JPanel();
+		//frequencyPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		String[] frequency = {"ONE-TIME", "DAILY", "WEEKLY", "MONRHLY"};
+		
 		JPanel titleAndTextPanel = new JPanel();
+		titleAndTextPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
+		
+		JLabel frequencyL = new JLabel("FREQUENCY");
+		freField = new JComboBox(frequency);
+		frequencyPanel.add(frequencyL);
+		frequencyPanel.add(freField);
+		
+		//JLabel reminder = new JLabel("REMINDER");
+		JPanel reTime = new JPanel();
+		Border rtimeBorder = new TitledBorder(null, "REMINDER");
+		reTime.setBorder(rtimeBorder);
+		rTimeHL = new JLabel("Hour");
+		reTime.add(rTimeHL);
+		rTimeH = new JTextField(4);
+		reTime.add(rTimeH);
+		rTimeML = new JLabel("Minute");
+		reTime.add(rTimeML);
+		rTimeM = new JTextField(4);
+		reTime.add(rTimeM);
+		frequencyPanel.add(reTime);
+		
+		titleAndFrePanel.add(frequencyPanel, BorderLayout.NORTH);
+		//titleAndTextPanel.add(frequencyL);
+		//titleAndTextPanel.add(freField);
+		//top.add(timeAndReq, BorderLayout.CENTER);
+		//contentPane.add("North", top);
+		// ADD end		
+		
 		JLabel titleL = new JLabel("TITLE");
 		titleField = new JTextField(15);
 		titleAndTextPanel.add(titleL);
 		titleAndTextPanel.add(titleField);
+		
+		// ADD begin
+		Location[] locations = cal.controller.getLocationList();
+		if (locations == null){
+			locations = new Location[0];
+		}
+		JLabel locationL = new JLabel("LOCATION");
+		locField = new JComboBox(locations);
+		titleAndTextPanel.add(locationL);
+		titleAndTextPanel.add(locField);
+		// ADD end
+		
+		titleAndFrePanel.add(titleAndTextPanel, BorderLayout.SOUTH);
 
 		detailPanel = new JPanel();
 		detailPanel.setLayout(new BorderLayout());
@@ -161,7 +230,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 		JScrollPane detailScroll = new JScrollPane(detailArea);
 		detailPanel.add(detailScroll);
 
-		pDes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, titleAndTextPanel,
+		//pDes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, titleAndTextPanel,
+				//detailPanel);
+		
+		pDes = new JSplitPane(JSplitPane.VERTICAL_SPLIT, titleAndFrePanel,
 				detailPanel);
 
 		top.add(pDes, BorderLayout.SOUTH);
@@ -353,6 +425,30 @@ public class AppScheduler extends JDialog implements ActionListener,
 	private void saveButtonResponse() {
 		// Fix Me!
 		// Save the appointment to the hard disk
+        NewAppt.setTitle(titleField.getText());
+        NewAppt.setInfo(detailArea.getText());
+        int[] gettime = getValidTimeInterval();
+        int[] getdate = getValidDate();
+        //Timestamp d(getdate[0], getdate[1], getdate[2]);
+        Calendar calendar = Calendar.getInstance();
+        int min = gettime[0]%60;
+        int h = (gettime[0] - min)/60;
+        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
+        Timestamp sd = new Timestamp(calendar.getTimeInMillis());
+        min = gettime[1]%60;
+        h = (gettime[1] - min)/60;
+        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
+        Timestamp ed = new Timestamp(calendar.getTimeInMillis());
+        TimeSpan d = new TimeSpan(sd, ed);
+        NewAppt.setTimeSpan(d);
+        
+        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
+        Timestamp rd = new Timestamp(calendar.getTimeInMillis());
+        //** NOT YET DONE save reminder action 
+        parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
+        JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
+                        "Success", JOptionPane.INFORMATION_MESSAGE);
+        //parent.setVisible(true);
 	}
 
 	private Timestamp CreateTimeStamp(int[] date, int time) {
