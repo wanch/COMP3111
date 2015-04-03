@@ -39,8 +39,8 @@ public class ApptStorageNullImpl extends ApptStorage {
 		else {
 			int index = mAppts.size() +1;
 			appt.setID(index);
-			mAppts.put(appt.getID(), appt);
 		}
+		mAppts.put(appt.getID(), appt);
 	}
 
 	@Override

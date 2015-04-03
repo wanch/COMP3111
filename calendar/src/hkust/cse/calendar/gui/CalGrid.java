@@ -52,7 +52,7 @@ public class CalGrid extends JFrame implements ActionListener {
 	// private User mNewUser;
 	private static final long serialVersionUID = 1L;
 	public ApptStorageControllerImpl controller;
-	public User mCurrUser;
+	public User mCurrUser = null;
 	private String mCurrTitle = "Desktop Calendar - No User - ";
 	private GregorianCalendar today;
 	public int currentD;
@@ -502,6 +502,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		end.setHours(23);
 		TimeSpan period = new TimeSpan(start, end);
 		return controller.RetrieveAppts(mCurrUser, period);
+		//return controller.RetrieveAppts(period);
 	}
 
 	private void mousePressResponse() {

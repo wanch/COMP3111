@@ -40,6 +40,8 @@ public class ApptStorageControllerImpl {
 
 	/* Retrieve the Appt's in the storage for a specific user within the specific time span */
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {
+		if (entity.equals(null))			// Test
+			return mApptStorage.RetrieveAppts(time);
 		return mApptStorage.RetrieveAppts(entity, time);
 	}
 

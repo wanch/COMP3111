@@ -20,6 +20,11 @@ public class Appt implements Serializable {
 
 	private boolean isjoint;					// The appointment is a joint appointment
 	
+	// ADD
+	private Location location;
+	
+	private String frequency;
+	
 	private LinkedList<String> attend;			// The Attendant list
 	
 	private LinkedList<String> reject;			// The reject list
@@ -29,6 +34,7 @@ public class Appt implements Serializable {
 	public Appt() {								// A default constructor used to set all the attribute to default values
 		mApptID = 0;
 		mTimeSpan = null;
+		reminderTime = null;
 		mTitle = "Untitled";
 		mInfo = "";
 		isjoint = false;
@@ -66,6 +72,22 @@ public class Appt implements Serializable {
 	public void setJoinID(int joinID){
 		this.joinApptID = joinID;
 	}
+	
+	// Getter of the appointment id
+	public Location getLocation() {
+		return location;
+	}
+	
+	// setter of the reminder
+	public Timestamp getReminder(){
+		return this.reminderTime;
+	}
+	
+	// Getter if the frequency
+	public String getFrequency(String fre) {
+		return frequency;
+	}
+	
 	// Getter of the attend LinkedList<String>
 	public LinkedList<String> getAttendList(){
 		return attend;
@@ -188,4 +210,14 @@ public class Appt implements Serializable {
 		this.reminderTime = r;
 	}
 
+	// Setter if the location
+	public void setLocation(Location loc) {
+		location = loc;
+	}
+	
+	// Setter if the frequency
+	public void setFrequency(String fre) {
+		frequency = fre;
+	}
+	
 }

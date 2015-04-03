@@ -20,6 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import UserStorage.UserStorage;
+import UserStorage.UserStorageControllerImpl;
+
 
 public class LoginDialog extends JFrame implements ActionListener
 {
@@ -29,9 +32,11 @@ public class LoginDialog extends JFrame implements ActionListener
 	private JButton closeButton;
 	private JButton signupButton;
 	
+	UserStorageControllerImpl controller;
+	
 	public LoginDialog()		// Create a dialog to log in
 	{
-		
+		controller = new UserStorageControllerImpl(new UserStorage());
 		setTitle("Log in");
 		
 		addWindowListener(new WindowAdapter() {
@@ -99,13 +104,40 @@ public class LoginDialog extends JFrame implements ActionListener
 			// When the button is clicked, check the user name and password, and try to log the user in
 			
 			//login();
-			User user = new User( "noname", "nopass");
-			CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
+
+			String name = userName.getText();
+			String pw = new String(password.getPassword());
+			User user = null;
+			if (name.equals("") && pw.equals("")){
+				user = new User( "noname", "nopass");
+				CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
+			}
+			else if (ValidString(name) && ValidString(pw)){
+				if (controller.cheakUserExist(name) == true){
+					if (controller.retrieveUser(name, pw) == null){
+						JOptionPane.showMessageDialog(this,
+								"Not correct user name or password", "SignIn Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}else {
+						user = controller.retrieveUser(name, pw);
+						CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
+					}
+				}else {
+					JOptionPane.showMessageDialog(this,
+							"Not correct user name or password", "SignIn Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
+			//if (user != null)
+				//CalGrid grid = new CalGrid(new ApptStorageControllerImpl(new ApptStorageNullImpl(user)));
 			setVisible( false );
 		}
 		else if(e.getSource() == signupButton)
 		{
 			// Create a new account
+			SignupDialog sud = new SignupDialog(controller);
 		}
 		else if(e.getSource() == closeButton)
 		{

@@ -82,6 +82,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 	
 	private	JComboBox locField;					// ADD
 	private JComboBox freField;					// ADD
+	String[] frequency = {"ONE-TIME", "DAILY", "WEEKLY", "MONRHLY"};
 	private JLabel rTimeHL;
 	private JTextField rTimeH;
 	private JLabel rTimeML;
@@ -171,7 +172,6 @@ public class AppScheduler extends JDialog implements ActionListener,
 		//Enum frequency = {ONE-TIME, daily, weekly, monthly};
 		JPanel frequencyPanel = new JPanel();
 		//frequencyPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-		String[] frequency = {"ONE-TIME", "DAILY", "WEEKLY", "MONRHLY"};
 		
 		JPanel titleAndTextPanel = new JPanel();
 		titleAndTextPanel.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
@@ -429,26 +429,46 @@ public class AppScheduler extends JDialog implements ActionListener,
         NewAppt.setInfo(detailArea.getText());
         int[] gettime = getValidTimeInterval();
         int[] getdate = getValidDate();
+        if (gettime == null || getdate == null)
+        	return;
         //Timestamp d(getdate[0], getdate[1], getdate[2]);
-        Calendar calendar = Calendar.getInstance();
-        int min = gettime[0]%60;
-        int h = (gettime[0] - min)/60;
-        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
-        Timestamp sd = new Timestamp(calendar.getTimeInMillis());
-        min = gettime[1]%60;
-        h = (gettime[1] - min)/60;
-        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
-        Timestamp ed = new Timestamp(calendar.getTimeInMillis());
+        //Calendar calendar = Calendar.getInstance();
+        //int min = gettime[0]%60;
+        //int h = (gettime[0] - min)/60;
+        //calendar.set(getdate[0], getdate[1], getdate[2],h, min);
+        //Timestamp sd = new Timestamp(calendar.getTimeInMillis());
+        Timestamp sd = CreateTimeStamp(getdate, gettime[0]);
+        //min = gettime[1]%60;
+        //h = (gettime[1] - min)/60;
+        //calendar.set(getdate[0], getdate[1], getdate[2],h, min);
+        //Timestamp ed = new Timestamp(calendar.getTimeInMillis());
+        Timestamp ed =  CreateTimeStamp(getdate, gettime[1]);
         TimeSpan d = new TimeSpan(sd, ed);
         NewAppt.setTimeSpan(d);
         
-        calendar.set(getdate[0], getdate[1], getdate[2],h, min);
-        Timestamp rd = new Timestamp(calendar.getTimeInMillis());
-        //** NOT YET DONE save reminder action 
+        //Location[] locations = parent.controller.getLocationList();
+        //locField.getSelectedItem().toString();
+        // save location
+        NewAppt.setLocation((Location) locField.getSelectedItem());
+        
+        // save remainder
+        int reTime = getTime(rTimeH, rTimeM);
+        //int rmin = reTime%60;
+        //int rh = (reTime - rmin)/60;
+        //calendar.set(getdate[0], getdate[1], getdate[2],rh, rmin);
+        //Timestamp rd = new Timestamp(calendar.getTimeInMillis());
+        Timestamp rd =  CreateTimeStamp(getdate, reTime);
+        NewAppt.setReminder(rd);
+ 
+        // save frequency
+        String fre = freField.getSelectedItem().toString();
+        NewAppt.setFrequency(fre);
+        
         parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
         JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
                         "Success", JOptionPane.INFORMATION_MESSAGE);
         //parent.setVisible(true);
+        parent.updateAppList();
 	}
 
 	private Timestamp CreateTimeStamp(int[] date, int time) {
@@ -463,6 +483,10 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	public void updateSetApp(Appt appt) {
 		// Fix Me!
+		// For what?
+        //NewAppt.setTitle(titleField.getText());
+        //NewAppt.setInfo(detailArea.getText());
+		//parent.controller.ManageAppt(appt, ApptStorageControllerImpl.MODIFY);
 	}
 
 	public void componentHidden(ComponentEvent e) {
