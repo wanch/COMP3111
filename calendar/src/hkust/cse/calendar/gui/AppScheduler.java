@@ -468,7 +468,18 @@ public class AppScheduler extends JDialog implements ActionListener,
         JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
                         "Success", JOptionPane.INFORMATION_MESSAGE);
         //parent.setVisible(true);
+        
+        //reset
+        titleField.setText("");
+        detailArea.setText("");
+        sTimeH.setText("");
+        sTimeM.setText("");
+        eTimeH.setText("");
+        eTimeM.setText("");
+        rTimeH.setText("");
+        rTimeM.setText("");        
         parent.updateAppList();
+        parent.UpdateCal();
 	}
 
 	private Timestamp CreateTimeStamp(int[] date, int time) {

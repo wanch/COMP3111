@@ -9,6 +9,15 @@ public class UserStorage {
 	public HashMap<String, User> mUsers;		//a hashmap to save every thing to it, write to memory by the memory based storage implementation	
 	//public User defaultUser;	//a user object, now is single user mode without login
 	//public int mAssignedApptID;	//a global appointment ID for each appointment record
+	
+	protected static UserStorage instance = null;
+	
+	public UserStorage getInstance() {
+		if(instance == null) {
+			instance = new UserStorage();
+		}
+		return instance;
+	}
 
 	public UserStorage() {	//default constructor
 		mUsers = new HashMap<String, User>();

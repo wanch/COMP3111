@@ -13,6 +13,8 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Timestamp;
+import java.util.Calendar;
+
 import javax.swing.BorderFactory;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -413,7 +415,22 @@ public class AppList extends JPanel implements ActionListener {
 	}
 
 	private void delete() {
-
+		// ADD
+		Appt apptTitle = getSelectedAppTitle();
+		if (apptTitle == null)
+			return;
+		
+		Calendar cal = Calendar.getInstance();
+		
+		if (apptTitle.TimeSpan().StartTime().before(cal.getTime())){
+			JOptionPane.showMessageDialog(null, "Event is passed!",
+					"Input Error", JOptionPane.ERROR_MESSAGE);
+		}else{
+			//parent.controller.RetrieveAppts(joinApptID)
+			parent.controller.ManageAppt(apptTitle, ApptStorageControllerImpl.REMOVE);
+			parent.updateAppList();
+			parent.UpdateCal();
+		}
 	}
 
 	private void modify() {

@@ -113,7 +113,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		});
 
 		controller = con;
-		mCurrUser = null;
+		mCurrUser = controller.getDefaultUser();
 
 		previousRow = 0;
 		previousCol = 0;
@@ -403,7 +403,7 @@ public class CalGrid extends JFrame implements ActionListener {
 				return;
 			currentY = currentY + 1;
 			year.setText(new Integer(currentY).toString());
-			CalGrid.this.setTitle("Desktop Calendar - No User - (" + currentY
+			CalGrid.this.setTitle("Desktop Calendar - "+ mCurrUser.ID() + " - (" + currentY
 					+ "-" + currentM + "-" + currentD + ")");
 			getDateArray(data);
 			if (tableView != null) {
@@ -418,7 +418,7 @@ public class CalGrid extends JFrame implements ActionListener {
 				return;
 			currentY = currentY - 1;
 			year.setText(new Integer(currentY).toString());
-			CalGrid.this.setTitle("Desktop Calendar - No User - (" + currentY
+			CalGrid.this.setTitle("Desktop Calendar - "+ mCurrUser.ID() + " - (" + currentY
 					+ "-" + currentM + "-" + currentD + ")");
 			getDateArray(data);
 			if (tableView != null) {
@@ -439,7 +439,7 @@ public class CalGrid extends JFrame implements ActionListener {
 					e1.printStackTrace();
 				}
 
-				CalGrid.this.setTitle("Desktop Calendar - No User - ("
+				CalGrid.this.setTitle("Desktop Calendar - "+ mCurrUser.ID() + " - ("
 						+ currentY + "-" + currentM + "-" + currentD + ")");
 				getDateArray(data);
 				if (tableView != null) {
@@ -457,6 +457,8 @@ public class CalGrid extends JFrame implements ActionListener {
 		applist.clear();
 		applist.repaint();
 		applist.setTodayAppt(GetTodayAppt());
+		if (tableView != null) 
+			tableView.repaint();
 	}
 
 	public void UpdateCal() {
@@ -470,11 +472,12 @@ public class CalGrid extends JFrame implements ActionListener {
 //			for (int i = 0; i < 6; i++)
 //				for (int j = 0; j < 7; j++)
 //					apptMarker[i][j] = new Vector(10, 1);
-
-			TableModel t = prepareTableModel();
-			this.tableView.setModel(t);
-			this.tableView.repaint();
-			updateAppList();
+			if (tableView != null) {		//Exception in thread "AWT-EventQueue-0"?
+				TableModel t = prepareTableModel();
+				this.tableView.setModel(t);
+				this.tableView.repaint();
+				updateAppList();
+			}
 		}
 	}
 

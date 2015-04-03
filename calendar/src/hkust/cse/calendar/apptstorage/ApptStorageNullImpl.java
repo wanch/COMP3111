@@ -3,6 +3,9 @@ package hkust.cse.calendar.apptstorage;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
+import UserStorage.UserStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
@@ -18,6 +21,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		defaultUser = user;
 		//mAppts = new HashMap()<int, Appt>;
 		mAppts = new HashMap<Integer, Appt>();
+		//userController = UserStorageControllerImpl.getInstance();
 	}
 	
 	// ADD
@@ -39,6 +43,16 @@ public class ApptStorageNullImpl extends ApptStorage {
 		else {
 			int index = mAppts.size() +1;
 			appt.setID(index);
+			TimeSpan time = appt.TimeSpan();
+			Appt[] overlapEvents = RetrieveAppts(time);
+			
+			for (int i = 0; i < overlapEvents.length; i++){
+				if (overlapEvents[i].TimeSpan().Overlap(time)){
+					JOptionPane.showMessageDialog(null, "Time overlap!",
+							"Input Error", JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+			}
 		}
 		mAppts.put(appt.getID(), appt);
 	}

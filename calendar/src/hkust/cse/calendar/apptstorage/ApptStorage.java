@@ -7,6 +7,8 @@ import hkust.cse.calendar.unit.User;
 
 import java.util.HashMap;
 
+import UserStorage.UserStorageControllerImpl;
+
 
 public abstract class ApptStorage {
 
@@ -20,6 +22,8 @@ public abstract class ApptStorage {
 	public abstract Location[] getLocationList();
 	
 	public abstract void setLocationList(Location[] locations);
+	
+	public UserStorageControllerImpl userController;
 
 	public abstract void SaveAppt(Appt appt);	//abstract method to save an appointment record
 

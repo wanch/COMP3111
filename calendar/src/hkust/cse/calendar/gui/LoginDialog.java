@@ -36,7 +36,8 @@ public class LoginDialog extends JFrame implements ActionListener
 	
 	public LoginDialog()		// Create a dialog to log in
 	{
-		controller = new UserStorageControllerImpl(new UserStorage());
+		controller = UserStorageControllerImpl.getInstance();
+		//controller = new UserStorageControllerImpl(new UserStorage());
 		setTitle("Log in");
 		
 		addWindowListener(new WindowAdapter() {
