@@ -22,7 +22,35 @@ class CalCellRenderer extends DefaultTableCellRenderer
 		setHorizontalAlignment(SwingConstants.RIGHT);
 		setVerticalAlignment(SwingConstants.TOP);
 	}
+	
+	public static int row=-1,col=-1,state;
 
+	public CalCellRenderer(Object value,int r,int c) {
+		if (value != null) {
+			setForeground(Color.red);
+		} else
+			setForeground(Color.black);
+		if(r==row&&c==col)
+		{
+			if(state==1)setBackground(Color.yellow);
+			//else if(state==2)setBackground(Color.yellow);
+			//else if(state==3)setBackground(Color.blue);
+			//else if(state==4)setBackground(Color.red);
+			else setBackground(Color.white);
+		}
+		else setBackground(Color.white);
+		setHorizontalAlignment(SwingConstants.RIGHT);
+		setVerticalAlignment(SwingConstants.TOP);
+	}
+
+	// ADD
+	public CalCellRenderer(int value){
+		if (value == 1){
+		setBackground(Color.blue);
+		}else
+		setBackground(Color.white);
+	}
+	
 	public int row() {
 		return r;
 	}

@@ -76,4 +76,13 @@ public class ApptStorageControllerImpl {
 	public void LoadApptFromXml(){
 		mApptStorage.LoadApptFromXml();
 	}
+
+	public Appt[] retrieveUserAppts(User mCurrUser, TimeSpan interval,
+			Location locations) {
+		// TODO Auto-generated method stub
+		
+		return null;
+	}
+
+
 }

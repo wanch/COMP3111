@@ -1,8 +1,10 @@
 package hkust.cse.calendar.apptstorage;
 
+import java.awt.Frame;
 import java.sql.Timestamp;
 import java.util.HashMap;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import UserStorage.UserStorageControllerImpl;
@@ -38,29 +40,47 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void SaveAppt(Appt appt) {
 		// TODO Auto-generated method stub
-		if (mAppts.isEmpty())
+		if (mAppts.isEmpty()){
 			appt.setID(0);
-		else {
+			System.out.println("id = " + appt.getID());
+		}else {
 			int index = mAppts.size() +1;
 			appt.setID(index);
 			TimeSpan time = appt.TimeSpan();
+			System.out.println("TimeSpan");
 			Appt[] overlapEvents = RetrieveAppts(time);
+			System.out.println("RetrieveAppts");
 			
-			for (int i = 0; i < overlapEvents.length; i++){
+			/*for (int i = 0; i < overlapEvents.length; i++){
 				if (overlapEvents[i].TimeSpan().Overlap(time)){
 					JOptionPane.showMessageDialog(null, "Time overlap!",
 							"Input Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-			}
+			}*/
+	        if (overlapEvents.length > 0){
+	        	//JOptionPane.showMessageDialog(null, "Time overlap!",
+						//"Input Error", JOptionPane.INFORMATION_MESSAGE);
+	        	JOptionPane optionPane = new JOptionPane();
+	        	JDialog dialog = optionPane.createDialog("Input Error");
+	        	optionPane.setMessage("Time overlap!");
+	        	optionPane.setMessageType(JOptionPane.ERROR_MESSAGE);
+	        	dialog.setAlwaysOnTop(true);
+	        	dialog.setVisible(true);
+	        	//JOptionPane.showMessageDialog(dialog, dialog, null, index, null)
+	        	return;
+	        }
 		}
+    	JOptionPane.showMessageDialog(null, appt.getTitle(),
+                "Success", JOptionPane.INFORMATION_MESSAGE);
+        System.out.println(mAppts.size());
 		mAppts.put(appt.getID(), appt);
 	}
 
 	@Override
 	public Appt[] RetrieveAppts(TimeSpan d) {
 		// TODO Auto-generated method stub
-		Appt[] result = new Appt[0];
+		Appt[] crash = new Appt[mAppts.size()];		// Whole size
 		int count = 0;
 		for (int i = 0; i < mAppts.size(); i++){
 			if (mAppts.containsKey(i)){
@@ -70,11 +90,18 @@ public class ApptStorageNullImpl extends ApptStorage {
 			Timestamp eTime = getTimeSpan.EndTime();
 			if ((sTime.after(d.StartTime()) && eTime.before(d.EndTime())) || 
 					(sTime.equals(d.StartTime()) && eTime.equals(d.EndTime())))
-				result[count] = temp;
+				crash[count] = temp;
 			count = count +1;
 			}
 		}
-		return result;
+		if (count > 0){
+			Appt[] result = new Appt[count];
+			for (int i = 0; i < crash.length; i++)
+				result[i] = crash[i];
+			return result;
+		}
+		//return result;
+		return null;
 	}
 
 	@Override

@@ -188,6 +188,14 @@ public class CalGrid extends JFrame implements ActionListener {
 
 				if (tem.equals("") == false) {
 					try {
+						Timestamp start = new Timestamp(currentY - 1900,currentM - 1,
+								Integer.parseInt(tem.substring(0)), 0, 0, 0, 0);
+						Timestamp end = new Timestamp(currentY - 1900,currentM - 1,
+								Integer.parseInt(tem.substring(0)), 23, 59, 0,
+								0);
+						TimeSpan interval = new TimeSpan(start, end);
+						// System.out.println(start); System.out.println(end);
+						int get_day_appt = controller.retrieveUserAppts(mCurrUser,interval, null).length;
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(today.MONTH) + 1 == currentM
 								&& today.get(today.DAY_OF_MONTH) == Integer
@@ -547,6 +555,17 @@ public class CalGrid extends JFrame implements ActionListener {
 		CalGrid.this.setTitle(mCurrTitle + "(" + currentY + "-" + currentM
 				+ "-" + currentD + ")");
 		updateAppList();
+		if(CalCellRenderer.row==currentRow&&CalCellRenderer.col==currentCol)
+		{
+			CalCellRenderer.state=(CalCellRenderer.state+1)%5;
+		}
+		else
+		{
+			CalCellRenderer.state=1;
+			CalCellRenderer.row=currentRow;
+			CalCellRenderer.col=currentCol;	
+		}
+		tableView.repaint();
 	}
 
 	public boolean IsTodayAppt(Appt appt) {

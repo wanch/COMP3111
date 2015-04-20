@@ -96,7 +96,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 
 	private void commonConstructor(String title, CalGrid cal) {
 		parent = cal;
-		this.setAlwaysOnTop(true);
+		//this.setAlwaysOnTop(true);
 		setTitle(title);
 		setModal(false);
 
@@ -465,8 +465,8 @@ public class AppScheduler extends JDialog implements ActionListener,
         NewAppt.setFrequency(fre);
         
         parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
-        JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
-                        "Success", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
+                        //"Success", JOptionPane.INFORMATION_MESSAGE);
         //parent.setVisible(true);
         
         //reset
