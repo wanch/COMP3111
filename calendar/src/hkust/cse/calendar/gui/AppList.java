@@ -323,8 +323,11 @@ public class AppList extends JPanel implements ActionListener {
 	public void setTodayAppt(Appt[] list) {
 		if (list == null)
 			return;
-		for (int i = 0; i < list.length; i++)
+		System.out.println("setTodayAppt = " +list.length);
+		for (int i = 0; i < list.length; i++){
+			System.out.print(list[i] + " ");
 			addAppt(list[i]);
+		}
 		repaint();
 
 	}

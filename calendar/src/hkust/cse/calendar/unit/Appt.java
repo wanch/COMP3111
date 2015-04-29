@@ -32,7 +32,7 @@ public class Appt implements Serializable {
 	private LinkedList<String> waiting;			// The waiting list
 	
 	public Appt() {								// A default constructor used to set all the attribute to default values
-		mApptID = 0;
+		mApptID = -1;
 		mTimeSpan = null;
 		reminderTime = null;
 		mTitle = "Untitled";

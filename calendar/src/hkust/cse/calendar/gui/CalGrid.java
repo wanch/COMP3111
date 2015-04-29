@@ -191,23 +191,30 @@ public class CalGrid extends JFrame implements ActionListener {
 						Timestamp start = new Timestamp(currentY - 1900,currentM - 1,
 								Integer.parseInt(tem.substring(0)), 0, 0, 0, 0);
 						Timestamp end = new Timestamp(currentY - 1900,currentM - 1,
-								Integer.parseInt(tem.substring(0)), 23, 59, 0,
-								0);
+								Integer.parseInt(tem.substring(0)), 23, 59, 0, 0);
 						TimeSpan interval = new TimeSpan(start, end);
 						// System.out.println(start); System.out.println(end);
-						int get_day_appt = controller.retrieveUserAppts(mCurrUser,interval, null).length;
+						boolean dayAppt = false;
+						if (controller.RetrieveAppts(mCurrUser,interval) != null)
+							dayAppt = true;
+						//System.out.println("Retrieve Appts during " + interval);
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(today.MONTH) + 1 == currentM
 								&& today.get(today.DAY_OF_MONTH) == Integer
 										.parseInt(tem)) {
-							return new CalCellRenderer(today);
+							//System.out.println("Retrieve Appts = " + dayAppt);
+							return new CalCellRenderer(today, dayAppt);
 						}
+						else return new CalCellRenderer(null, dayAppt);
 					} catch (Throwable e) {
+						System.out.println(e.toString());
+						System.out.println(row + " " + col + " " + tem.substring(0) + " " + tem.substring(1));
 						System.exit(1);
 					}
 
 				}
-				return new CalCellRenderer(null);
+				System.out.println("null " + row + " " + col + " " + tem);
+				return new CalCellRenderer(null, false);
 			}
 		};
 
@@ -555,7 +562,7 @@ public class CalGrid extends JFrame implements ActionListener {
 		CalGrid.this.setTitle(mCurrTitle + "(" + currentY + "-" + currentM
 				+ "-" + currentD + ")");
 		updateAppList();
-		if(CalCellRenderer.row==currentRow&&CalCellRenderer.col==currentCol)
+		/*if(CalCellRenderer.row==currentRow&&CalCellRenderer.col==currentCol)
 		{
 			CalCellRenderer.state=(CalCellRenderer.state+1)%5;
 		}
@@ -564,7 +571,7 @@ public class CalGrid extends JFrame implements ActionListener {
 			CalCellRenderer.state=1;
 			CalCellRenderer.row=currentRow;
 			CalCellRenderer.col=currentCol;	
-		}
+		}*/
 		tableView.repaint();
 	}
 

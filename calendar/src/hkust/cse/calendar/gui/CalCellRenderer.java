@@ -13,19 +13,27 @@ class CalCellRenderer extends DefaultTableCellRenderer
 
 	private int c;
 
-	public CalCellRenderer(Object value) {
+	//public CalCellRenderer(Object value) {
+	public CalCellRenderer(Object value, boolean exist){
 		if (value != null) {
 			setForeground(Color.red);
 		} else
 			setForeground(Color.black);
-		setBackground(Color.white);
+		//setBackground(Color.white);
+		
+		if (exist == true){
+			setBackground(Color.blue);
+		}else{
+			setBackground(Color.white);
+		}
+		
 		setHorizontalAlignment(SwingConstants.RIGHT);
 		setVerticalAlignment(SwingConstants.TOP);
 	}
 	
-	public static int row=-1,col=-1,state;
+	//public static int row=-1,col=-1,state;
 
-	public CalCellRenderer(Object value,int r,int c) {
+	/*public CalCellRenderer(Object value,int r,int c) {
 		if (value != null) {
 			setForeground(Color.red);
 		} else
@@ -39,17 +47,19 @@ class CalCellRenderer extends DefaultTableCellRenderer
 			else setBackground(Color.white);
 		}
 		else setBackground(Color.white);
+		
 		setHorizontalAlignment(SwingConstants.RIGHT);
 		setVerticalAlignment(SwingConstants.TOP);
-	}
+	}*/
 
 	// ADD
-	public CalCellRenderer(int value){
-		if (value == 1){
-		setBackground(Color.blue);
-		}else
-		setBackground(Color.white);
-	}
+	/*public CalCellRenderer(Object value, boolean exist){
+		if (exist == true){
+			setBackground(Color.blue);
+		}else{
+			setBackground(Color.white);
+		}
+	}*/
 	
 	public int row() {
 		return r;

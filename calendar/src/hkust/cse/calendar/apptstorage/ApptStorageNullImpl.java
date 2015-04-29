@@ -24,6 +24,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		//mAppts = new HashMap()<int, Appt>;
 		mAppts = new HashMap<Integer, Appt>();
 		//userController = UserStorageControllerImpl.getInstance();
+		mAssignedApptID = 0;
 	}
 	
 	// ADD
@@ -41,15 +42,14 @@ public class ApptStorageNullImpl extends ApptStorage {
 	public void SaveAppt(Appt appt) {
 		// TODO Auto-generated method stub
 		if (mAppts.isEmpty()){
-			appt.setID(0);
-			System.out.println("id = " + appt.getID());
+			appt.setID(mAssignedApptID);
+			System.out.println("Empty! title = " + appt.getTitle());
 		}else {
-			int index = mAppts.size() +1;
-			appt.setID(index);
+
 			TimeSpan time = appt.TimeSpan();
-			System.out.println("TimeSpan");
+			System.out.println("SaveAppt size=" + mAppts.size());
 			Appt[] overlapEvents = RetrieveAppts(time);
-			System.out.println("RetrieveAppts");
+			System.out.println("RetrieveAppts overlapEvents");
 			
 			/*for (int i = 0; i < overlapEvents.length; i++){
 				if (overlapEvents[i].TimeSpan().Overlap(time)){
@@ -57,8 +57,20 @@ public class ApptStorageNullImpl extends ApptStorage {
 							"Input Error", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
+			}
+			for (int i = 0; i < mAppts.size(); i++){
+				if (mAppts.containsKey(i)){
+					Appt temp = mAppts.get(i);
+					if (temp.TimeSpan().Overlap(time)){
+						JOptionPane.showMessageDialog(null, appt.getTitle(),
+				                "Error!", JOptionPane.INFORMATION_MESSAGE);
+						return;
+					}
+				}
 			}*/
-	        if (overlapEvents.length > 0){
+			
+			if (overlapEvents != null){
+	        //if (overlapEvents.length > 0){
 	        	//JOptionPane.showMessageDialog(null, "Time overlap!",
 						//"Input Error", JOptionPane.INFORMATION_MESSAGE);
 	        	JOptionPane optionPane = new JOptionPane();
@@ -71,10 +83,13 @@ public class ApptStorageNullImpl extends ApptStorage {
 	        	return;
 	        }
 		}
+		//int index = mAppts.size();
+		appt.setID(mAssignedApptID);
     	JOptionPane.showMessageDialog(null, appt.getTitle(),
                 "Success", JOptionPane.INFORMATION_MESSAGE);
-        System.out.println(mAppts.size());
 		mAppts.put(appt.getID(), appt);
+		System.out.println("appt id = " + appt.getID()+ " title = " + appt.getTitle());
+		mAssignedApptID = mAssignedApptID +1;
 	}
 
 	@Override
@@ -82,16 +97,23 @@ public class ApptStorageNullImpl extends ApptStorage {
 		// TODO Auto-generated method stub
 		Appt[] crash = new Appt[mAppts.size()];		// Whole size
 		int count = 0;
+		System.out.println("----RetrieveAppts-----");
+		System.out.println("mAppts.size() " + mAppts.size());
 		for (int i = 0; i < mAppts.size(); i++){
 			if (mAppts.containsKey(i)){
-			Appt temp = mAppts.get(i);
-			TimeSpan getTimeSpan = temp.TimeSpan();
-			Timestamp sTime = getTimeSpan.StartTime();
-			Timestamp eTime = getTimeSpan.EndTime();
-			if ((sTime.after(d.StartTime()) && eTime.before(d.EndTime())) || 
-					(sTime.equals(d.StartTime()) && eTime.equals(d.EndTime())))
-				crash[count] = temp;
-			count = count +1;
+				Appt temp = mAppts.get(i);
+				
+				TimeSpan getTimeSpan = temp.TimeSpan();
+				Timestamp sTime = getTimeSpan.StartTime();
+				Timestamp eTime = getTimeSpan.EndTime();
+				System.out.println("id = " + i + "title = " + temp.getTitle());
+				System.out.println("sTime = " + sTime.toString() + " eTime = " + eTime.toString());
+				System.out.println("d.sTime = " + d.StartTime().toString() + " d.eTime = " + d.EndTime().toString());
+				if ((sTime.after(d.StartTime()) && eTime.before(d.EndTime())) || 
+						(sTime.equals(d.StartTime()) && eTime.equals(d.EndTime()))){
+					crash[count] = temp;
+					count = count +1;
+				}
 			}
 		}
 		if (count > 0){
@@ -107,21 +129,28 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {
 		// TODO Auto-generated method stub
-		Appt[] result = new Appt[0];
+		Appt[] crash = new Appt[0];
 		int count = 0;
 		for (int i = 0; i < mAppts.size(); i++){
 			if (mAppts.containsKey(i)){
-			Appt temp = mAppts.get(i);
-			TimeSpan getTimeSpan = temp.TimeSpan();
-			Timestamp sTime = getTimeSpan.StartTime();
-			Timestamp eTime = getTimeSpan.EndTime();
-			if ((sTime.after(time.StartTime()) && eTime.before(time.EndTime())) || 
-					(sTime.equals(time.StartTime()) && eTime.equals(time.EndTime()))){
-				if (temp.getAllPeople().contains(entity))
-					result[count] = temp;
+				Appt temp = mAppts.get(i);
+				TimeSpan getTimeSpan = temp.TimeSpan();
+				Timestamp sTime = getTimeSpan.StartTime();
+				Timestamp eTime = getTimeSpan.EndTime();
+				if ((sTime.after(time.StartTime()) && eTime.before(time.EndTime())) || 
+						(sTime.equals(time.StartTime()) && eTime.equals(time.EndTime()))){
+					if (temp.getAllPeople().contains(entity)){
+						crash[count] = temp;
+						count = count +1;
+					}
+				}
 			}
-			count = count +1;
-			}
+		}
+		if (count > 0){
+			Appt[] result = new Appt[count];
+			for (int i = 0; i < crash.length; i++)
+				result[i] = crash[i];
+			return result;
 		}
 		return null;
 	}
