@@ -118,7 +118,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 		}
 		if (count > 0){
 			Appt[] result = new Appt[count];
-			for (int i = 0; i < crash.length; i++)
+			for (int i = 0; i < count; i++)
 				result[i] = crash[i];
 			return result;
 		}
