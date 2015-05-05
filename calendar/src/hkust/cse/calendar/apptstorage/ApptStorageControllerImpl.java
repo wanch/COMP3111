@@ -42,7 +42,8 @@ public class ApptStorageControllerImpl {
 	public Appt[] RetrieveAppts(User entity, TimeSpan time) {
 		if (entity.equals(null))			// Test
 			return mApptStorage.RetrieveAppts(time);
-		return mApptStorage.RetrieveAppts(entity, time);
+		return //mApptStorage.RetrieveAppts(entity, time);
+				mApptStorage.RetrieveAppts(time);
 	}
 
 	// overload method to retrieve appointment with the given joint appointment id

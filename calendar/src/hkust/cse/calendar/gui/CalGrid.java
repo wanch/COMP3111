@@ -179,7 +179,9 @@ public class CalGrid extends JFrame implements ActionListener {
 		yearGroup.add(month);
 
 		leftP.add(yearGroup, BorderLayout.NORTH);
-
+		
+		System.out.println("User id: " +mCurrUser.ID());
+		
 		TableModel dataModel = prepareTableModel();
 		
 		tableView = new JTable(dataModel) {
@@ -197,7 +199,11 @@ public class CalGrid extends JFrame implements ActionListener {
 						boolean dayAppt = false;
 						if (controller.RetrieveAppts(mCurrUser,interval) != null)
 							dayAppt = true;
+
 						System.out.println("Retrieve Appts during " + dayAppt);
+
+						System.out.println(row + " " + col + " dayAppt = " + dayAppt);
+
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(today.MONTH) + 1 == currentM
 								&& today.get(today.DAY_OF_MONTH) == Integer
