@@ -1,5 +1,6 @@
 package hkust.cse.calendar.gui;
 
+import hkust.cse.calendar.UserStorage.UserStorageControllerImpl;
 import hkust.cse.calendar.unit.User;
 
 import java.awt.Container;
@@ -17,8 +18,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
-import UserStorage.UserStorageControllerImpl;
 
 public class SignupDialog  extends JFrame implements ActionListener{
 	/**

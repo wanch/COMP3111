@@ -1,13 +1,21 @@
 package hkust.cse.calendar.apptstorage;
 
 import java.awt.Frame;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-import UserStorage.UserStorageControllerImpl;
+import hkust.cse.calendar.UserStorage.UserStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
@@ -17,6 +25,7 @@ public class ApptStorageNullImpl extends ApptStorage {
 
 	private User defaultUser = null;
 	Location[] _locations;
+	private String filepath = "D:/apptstorage.txt";
 	
 	public ApptStorageNullImpl( User user )
 	{
@@ -182,7 +191,58 @@ public class ApptStorageNullImpl extends ApptStorage {
 	@Override
 	public void LoadApptFromXml() {
 		// TODO Auto-generated method stub
+		try {
+			FileInputStream fis = new FileInputStream(filepath);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			Object o;
+			ArrayList<Appt> p = new ArrayList<Appt>();
+			try {
+				while ((o = is.readObject()) != null){
+					Appt tempAppt = (Appt)o;
+					p.add(tempAppt);
+					int tempID = tempAppt.getID();
+					System.out.println("tempID: " + tempID);
+					mAppts.put(tempID, tempAppt);
+				}
+			}
+			catch (EOFException exc)
+			{
+				is.close();
+			}
+			//setPosts(p);
+			is.close();
+		}catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println("Wait! There is something wrong.");
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e2) {
+			e2.printStackTrace();
+		}
 
+	}
+
+	@Override
+	public void SaveApptFromXml() {
+		// TODO Auto-generated method stub
+		FileOutputStream fs = null;
+		try {
+			fs = new FileOutputStream(filepath);
+		} catch (IOException e){
+			System.out.println("Wait! There is something wrong. I cannot find the file...");
+		}
+		try {
+			ObjectOutputStream os = new ObjectOutputStream(fs);
+			//os.writeObject(this);
+			for (int i = 0; i < mAppts.size(); i++){
+				os.writeObject(mAppts.get(i));
+			}
+			os.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

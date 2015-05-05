@@ -197,7 +197,7 @@ public class CalGrid extends JFrame implements ActionListener {
 						boolean dayAppt = false;
 						if (controller.RetrieveAppts(mCurrUser,interval) != null)
 							dayAppt = true;
-						//System.out.println("Retrieve Appts during " + interval);
+						System.out.println("Retrieve Appts during " + dayAppt);
 						if (today.get(Calendar.YEAR) == currentY
 								&& today.get(today.MONTH) + 1 == currentM
 								&& today.get(today.DAY_OF_MONTH) == Integer
@@ -208,12 +208,12 @@ public class CalGrid extends JFrame implements ActionListener {
 						else return new CalCellRenderer(null, dayAppt);
 					} catch (Throwable e) {
 						System.out.println(e.toString());
-						System.out.println(row + " " + col + " " + tem.substring(0) + " " + tem.substring(1));
+						//System.out.println(row + " " + col + " " + tem.substring(0) + " " + tem.substring(1));
 						System.exit(1);
 					}
 
 				}
-				System.out.println("null " + row + " " + col + " " + tem);
+				//System.out.println("null " + row + " " + col + " " + tem);
 				return new CalCellRenderer(null, false);
 			}
 		};
@@ -364,6 +364,7 @@ public class CalGrid extends JFrame implements ActionListener {
 					//System.out.println("closed");
 					dispose();
 					CalendarMain.logOut = true;
+					controller.SaveApptFromXml();
 					return;	//return to CalendarMain()
 				}
 			}

@@ -1,13 +1,12 @@
 package hkust.cse.calendar.apptstorage;//
 
+import hkust.cse.calendar.UserStorage.UserStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
 import hkust.cse.calendar.unit.User;
 
 import java.util.HashMap;
-
-import UserStorage.UserStorageControllerImpl;
 
 
 public abstract class ApptStorage {
@@ -40,6 +39,8 @@ public abstract class ApptStorage {
 	public abstract User getDefaultUser();		//abstract method to return the current user object
 	
 	public abstract void LoadApptFromXml();		//abstract method to load appointment from xml reocrd into hash map
+	
+	public abstract void SaveApptFromXml();		//abstract method to load appointment from xml reocrd into hash map
 	
 	/*
 	 * Add other methods if necessary

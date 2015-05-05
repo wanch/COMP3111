@@ -76,6 +76,11 @@ public class ApptStorageControllerImpl {
 	public void LoadApptFromXml(){
 		mApptStorage.LoadApptFromXml();
 	}
+	
+	// method used to load appointment from xml record into hash map
+	public void SaveApptFromXml(){
+		mApptStorage.SaveApptFromXml();
+	}
 
 	public Appt[] retrieveUserAppts(User mCurrUser, TimeSpan interval,
 			Location locations) {
