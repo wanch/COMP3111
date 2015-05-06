@@ -12,6 +12,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class UserStorage {
 	public HashMap<String, User> mUsers;		//a hashmap to save every thing to it, write to memory by the memory based storage implementation	
@@ -61,6 +63,16 @@ public class UserStorage {
 			return getUser(id);
 		}
 		else return null;
+	}
+	
+	public User[] retrieveAllUser() {
+		User[] allUsers = null;
+		int i = 0;
+		for (Entry<String, User> entry : mUsers.entrySet()){
+			allUsers[i] = entry.getValue();
+			i++;
+		}
+		return allUsers;
 	}
 	
 	public void LoadUserFromXml() {

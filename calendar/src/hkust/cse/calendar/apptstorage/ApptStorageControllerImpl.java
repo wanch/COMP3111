@@ -1,5 +1,7 @@
 package hkust.cse.calendar.apptstorage;
 
+import javax.swing.JOptionPane;
+
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
@@ -71,6 +73,20 @@ public class ApptStorageControllerImpl {
 	/* Get the defaultUser of mApptStorage */
 	public User getDefaultUser() {
 		return mApptStorage.getDefaultUser();
+	}
+	
+	public boolean checkOverlap(int id, Appt appt){
+		/*for (int i = 0; i < mAppts.size(); i++){
+			if (mAppts.containsKey(i)){
+				Appt temp = mAppts.get(i);
+				if (temp.TimeSpan().Overlap(time)){
+					JOptionPane.showMessageDialog(null, appt.getTitle(),
+			                "Error!", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			}
+		}*/
+		return false;
 	}
 
 	// method used to load appointment from xml record into hash map

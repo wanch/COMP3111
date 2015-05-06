@@ -4,6 +4,7 @@ import hkust.cse.calendar.apptstorage.ApptStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
+import hkust.cse.calendar.unit.User;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -28,15 +30,18 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
@@ -82,6 +87,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 	
 	private	JComboBox locField;					// ADD
 	private JComboBox freField;					// ADD
+	
+	private JCheckBox groupEvent;
+	
 	String[] frequency = {"ONE-TIME", "DAILY", "WEEKLY", "MONRHLY"};
 	private JLabel rTimeHL;
 	private JTextField rTimeH;
@@ -216,9 +224,18 @@ public class AppScheduler extends JDialog implements ActionListener,
 		locField = new JComboBox(locations);
 		titleAndTextPanel.add(locationL);
 		titleAndTextPanel.add(locField);
-		// ADD end
 		
+		JPanel gpPanel = new JPanel();
+		groupEvent = new JCheckBox("Group Event");
+		groupEvent.addItemListener((ItemListener) this);
+		gpPanel.add(groupEvent);
+		
+		titleAndFrePanel.add(gpPanel, BorderLayout.CENTER);
+		
+		// ADD end
 		titleAndFrePanel.add(titleAndTextPanel, BorderLayout.SOUTH);
+		
+
 
 		detailPanel = new JPanel();
 		detailPanel.setLayout(new BorderLayout());
@@ -312,6 +329,9 @@ public class AppScheduler extends JDialog implements ActionListener,
 				this.setVisible(false);
 				dispose();
 			}
+		}
+		if (groupEvent.isSelected()){
+			new InviteJointAppt();
 		}
 		parent.getAppList().clear();
 		parent.getAppList().setTodayAppt(parent.GetTodayAppt());
@@ -465,8 +485,7 @@ public class AppScheduler extends JDialog implements ActionListener,
         NewAppt.setFrequency(fre);
         
         parent.controller.ManageAppt(NewAppt, ApptStorageControllerImpl.NEW);
-        //JOptionPane.showMessageDialog(this, NewAppt.getTitle(),
-                        //"Success", JOptionPane.INFORMATION_MESSAGE);
+
         //parent.setVisible(true);
         
         //reset

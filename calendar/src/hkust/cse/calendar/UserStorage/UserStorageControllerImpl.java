@@ -50,6 +50,10 @@ public class UserStorageControllerImpl {
 		return mUserStorage.retrieveUser(userId, password);
 	}
 	
+	public User[] retrieveAllUser() {
+		return mUserStorage.retrieveAllUser();
+	}
+	
 	public void LoadUserFromXml() {
 		mUserStorage.LoadUserFromXml();
 	}
