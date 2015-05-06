@@ -227,7 +227,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 		
 		JPanel gpPanel = new JPanel();
 		groupEvent = new JCheckBox("Group Event");
-		groupEvent.addItemListener((ItemListener) this);
+		groupEvent.addActionListener(this);
 		gpPanel.add(groupEvent);
 		
 		titleAndFrePanel.add(gpPanel, BorderLayout.CENTER);
@@ -331,7 +331,7 @@ public class AppScheduler extends JDialog implements ActionListener,
 			}
 		}
 		if (groupEvent.isSelected()){
-			new InviteJointAppt();
+			InviteJointApptJDialog inviteDialog = new InviteJointApptJDialog(parent, this, NewAppt);
 		}
 		parent.getAppList().clear();
 		parent.getAppList().setTodayAppt(parent.GetTodayAppt());

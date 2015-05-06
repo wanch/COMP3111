@@ -13,12 +13,14 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 
 public class InviteJointApptJDialog extends JDialog implements ActionListener {
@@ -28,12 +30,14 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 	private AppScheduler lock;
 	
 	//private ArrayList<User> allUser;
-	private LinkedList<User> allParticipants;
+	//private LinkedList<User> allParticipants;
+	private LinkedList<String> allParticipants;
 	
 	private DefaultListModel<User> listModel;
 	private JList<User> list;
 
 	private ArrayList<User> invitedUser;
+	private ArrayList<User> canSelectUser;;
 	
 	private JLabel label;
 	private JButton confirm;
@@ -44,6 +48,9 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 		parent = cal;
 		lock = appsch;
 		NewAppt = newAppt;
+		
+		invitedUser = new ArrayList<User>();
+		canSelectUser = new ArrayList<User>();
 		
 		label = new JLabel("Invite users: ");
 		
@@ -63,6 +70,8 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 		this.setSize(new Dimension(300, 200));
 		this.setResizable(false);
 		this.setVisible(true);
+		
+		loadAvailableUsers();
 	}
 	
 	public void loadAvailableUsers(){
@@ -71,8 +80,18 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 		User[] allUsers = users.retrieveAllUser();
 		if (allUsers != null){
 			for (int i = 0; i < users.getSize(); i++){
-				if (allUsers[i] != parent.)
+				if (allUsers[i] != parent.mCurrUser){
+					if (allParticipants.contains(allUsers[i])){
+						invitedUser.add(allUsers[i]);
+						continue;
+					}else {
+						canSelectUser.add(allUsers[i]);
+						listModel.addElement(allUsers[i]);
+					}
+				}
 			}
+			list.setModel(listModel);
+			list.setSelectedIndex(0);
 		}
 	}
 	
@@ -80,7 +99,15 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() == confirm){
-			
+			List<User> selected = list.getSelectedValuesList();
+			if (selected == null){
+				JOptionPane.showMessageDialog(this, "Please select users!",
+						"Input Error", JOptionPane.ERROR_MESSAGE);
+			}else{
+				for (int i = 0; i < selected.size(); i++){
+					list.remove(selected.get(i)); /// how?
+				}
+			}
 		}
 	}
 

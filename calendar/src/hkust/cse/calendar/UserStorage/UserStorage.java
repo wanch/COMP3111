@@ -68,9 +68,11 @@ public class UserStorage {
 	public User[] retrieveAllUser() {
 		User[] allUsers = null;
 		int i = 0;
-		for (Entry<String, User> entry : mUsers.entrySet()){
-			allUsers[i] = entry.getValue();
-			i++;
+		if (mUsers.size() > 0){
+			for (Entry<String, User> entry : mUsers.entrySet()){
+				allUsers[i] = entry.getValue();
+				i++;
+			}
 		}
 		return allUsers;
 	}
