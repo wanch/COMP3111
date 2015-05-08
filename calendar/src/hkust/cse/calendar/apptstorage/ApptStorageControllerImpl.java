@@ -2,6 +2,7 @@ package hkust.cse.calendar.apptstorage;
 
 import javax.swing.JOptionPane;
 
+import hkust.cse.calendar.UserStorage.UserStorageControllerImpl;
 import hkust.cse.calendar.unit.Appt;
 import hkust.cse.calendar.unit.Location;
 import hkust.cse.calendar.unit.TimeSpan;
@@ -25,6 +26,7 @@ public class ApptStorageControllerImpl {
 	
 	/* The Appt storage */
 	private ApptStorage mApptStorage;
+	private UserStorageControllerImpl mUserInstance = UserStorageControllerImpl.getInstance();
 	
 	public Location[] getLocationList(){
 		return mApptStorage.getLocationList();
@@ -90,13 +92,15 @@ public class ApptStorageControllerImpl {
 	}
 
 	// method used to load appointment from xml record into hash map
-	public void LoadApptFromXml(){
+	public void LoadFromXml(){
 		mApptStorage.LoadApptFromXml();
+		mUserInstance.LoadUserFromXml();
 	}
 	
 	// method used to load appointment from xml record into hash map
-	public void SaveApptFromXml(){
+	public void SaveFromXml(){
 		mApptStorage.SaveApptFromXml();
+		mUserInstance.SaveUserFromXml();
 	}
 
 	public Appt[] retrieveUserAppts(User mCurrUser, TimeSpan interval,

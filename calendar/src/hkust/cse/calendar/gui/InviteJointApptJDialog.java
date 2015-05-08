@@ -7,6 +7,7 @@ import hkust.cse.calendar.unit.User;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -21,6 +22,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 public class InviteJointApptJDialog extends JDialog implements ActionListener {
@@ -35,12 +38,19 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 	
 	private DefaultListModel<User> listModel;
 	private JList<User> list;
+	private JScrollPane listSP;
+	
+	private DefaultListModel<User> othersListModel;
+	private JList<User> othersList;
+	private JScrollPane othersListSP;
 
 	private ArrayList<User> invitedUser;
-	private ArrayList<User> canSelectUser;;
+	private ArrayList<User> canSelectUser;
 	
-	private JLabel label;
-	private JButton confirm;
+	private JLabel Llabel;
+	private JLabel Rlabel;
+	private JButton addButton;
+	private JButton removeButton;
 	
 	private Appt NewAppt;
 
@@ -52,20 +62,46 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 		invitedUser = new ArrayList<User>();
 		canSelectUser = new ArrayList<User>();
 		
-		label = new JLabel("Invite users: ");
-		
+		Llabel = new JLabel("Invite users: ");
 		listModel = new DefaultListModel<User>();
-		
 		list = new JList<User>(listModel);
 		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		list.setSelectedIndex(0);
+		listSP = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		confirm = new JButton("Confirm");
+		Rlabel = new JLabel("Other users: ");
+		othersListModel = new DefaultListModel<User>();
+		othersList = new JList<User>();
+		othersList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		othersList.setSelectedIndex(0);
+		othersListSP = new JScrollPane(othersList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		addButton = new JButton("<<");
+		removeButton = new JButton(">>");
 		//JButton remove = new JButton("Remove");
 		
-		this.getContentPane().add(label, BorderLayout.NORTH);
-		this.getContentPane().add(list, BorderLayout.CENTER);
-		this.getContentPane().add(confirm, BorderLayout.SOUTH);
+		JPanel left = new JPanel(new BorderLayout());
+		left.add(Llabel, BorderLayout.NORTH);
+		left.add(list, BorderLayout.CENTER);
+		
+		JPanel center = new JPanel(new GridLayout());
+		left.add(addButton);
+		left.add(removeButton);
+		
+		JPanel right = new JPanel(new BorderLayout());
+		left.add(Rlabel, BorderLayout.NORTH);
+		left.add(othersList, BorderLayout.CENTER);
+		
+		//this.getContentPane().add(Llabel, BorderLayout.NORTH);
+		//this.getContentPane().add(list, BorderLayout.CENTER);
+		//this.getContentPane().add(addButton, BorderLayout.SOUTH);
+		
+		this.getContentPane().add(left, BorderLayout.WEST);
+		this.getContentPane().add(center, BorderLayout.CENTER);
+		this.getContentPane().add(right, BorderLayout.EAST);
+		
 		this.setTitle("Invitation Dialog");
 		this.setSize(new Dimension(300, 200));
 		this.setResizable(false);
@@ -98,14 +134,14 @@ public class InviteJointApptJDialog extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getSource() == confirm){
+		if (e.getSource() == addButton){
 			List<User> selected = list.getSelectedValuesList();
 			if (selected == null){
 				JOptionPane.showMessageDialog(this, "Please select users!",
 						"Input Error", JOptionPane.ERROR_MESSAGE);
 			}else{
 				for (int i = 0; i < selected.size(); i++){
-					list.remove(selected.get(i)); /// how?
+					listModel.remove(i); /// how?
 				}
 			}
 		}

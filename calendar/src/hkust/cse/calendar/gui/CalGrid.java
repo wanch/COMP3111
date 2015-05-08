@@ -370,7 +370,7 @@ public class CalGrid extends JFrame implements ActionListener {
 					//System.out.println("closed");
 					dispose();
 					CalendarMain.logOut = true;
-					controller.SaveApptFromXml();
+					controller.SaveFromXml();
 					return;	//return to CalendarMain()
 				}
 			}
@@ -413,7 +413,7 @@ public class CalGrid extends JFrame implements ActionListener {
 	private void initializeSystem() {
 
 		mCurrUser = this.controller.getDefaultUser();	//get User from controller
-		controller.LoadApptFromXml();
+		controller.LoadFromXml();
 		// Fix Me !
 		// Load the saved appointments from disk
 		checkUpdateJoinAppt();

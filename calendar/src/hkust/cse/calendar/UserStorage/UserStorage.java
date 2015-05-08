@@ -66,15 +66,17 @@ public class UserStorage {
 	}
 	
 	public User[] retrieveAllUser() {
-		User[] allUsers = null;
+		User[] allUsers = new User[mUsers.size()];
 		int i = 0;
 		if (mUsers.size() > 0){
+			System.out.println("User size "+ mUsers.size());
 			for (Entry<String, User> entry : mUsers.entrySet()){
 				allUsers[i] = entry.getValue();
 				i++;
 			}
-		}
-		return allUsers;
+			return allUsers;
+		}else
+			return null;
 	}
 	
 	public void LoadUserFromXml() {
